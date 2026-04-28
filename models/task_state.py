@@ -8,7 +8,7 @@ from models.tast_status import TaskStatus
 
 class TaskState(BaseModel):
     id: str = Field(..., description="Unique task ID")
-    case_id: str = Field(..., description="Associated case ID")
+    case_file_version_id: str = Field(..., description="Associated case file version ID")
     department_name: str
     assigned_to_user: str
     create_date: date
@@ -20,6 +20,6 @@ class TaskState(BaseModel):
         default=None,
         description="Type of data stored in `data` (e.g., 'finance', 'hr')"
     )
-    
+
     class Config:
-        use_enum_values = True  # ensures JSON stores "InProcess" not enum object
+        use_enum_values = True
