@@ -14,7 +14,7 @@ class TaskState(BaseModel):
     create_date: date
     due_date: date
     complete_date: Optional[date] = None
-    status: TaskStatus = TaskStatus.PENDING
+    status: TaskStatus
     data: Dict[str, Any] = Field(default_factory=dict)
     data_type: Optional[str] = Field(
         default=None,
