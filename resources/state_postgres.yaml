@@ -1,0 +1,14 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: statestore
+spec:
+  type: state.postgresql
+  version: v1
+  metadata:
+  - name: connectionString
+    value: "host=10.1.3.236 user=dapr_user password=feldspar-mirror-pannage dbname=dapr_db sslmode=disable"
+  - name: tableName
+    value: "state"
+  - name: actorStateStore
+    value: "true"

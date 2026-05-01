@@ -1,0 +1,16 @@
+[Unit]
+Description=RTIP Dapr Scheduler Service
+After=network.target
+
+[Service]
+User=rtip
+Group=rtip
+
+WorkingDirectory=/home/rtip/.dapr
+ExecStart=/home/rtip/.dapr/bin/scheduler --etcd-data-dir /home/rtip/.dapr/scheduler-data
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+[Unit]
+Description=RTIP Dapr Placement Service
+After=network.target
+
+[Service]
+User=rtip
+Group=rtip
+
+ExecStart=/home/rtip/.dapr/bin/placement \
+  --port 50005 \
+  --healthz-port 8081 \
+  --metrics-port 9091
+
+Restart=always
+RestartSec=5
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
