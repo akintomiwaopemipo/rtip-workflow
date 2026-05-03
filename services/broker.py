@@ -3,9 +3,9 @@ import httpx
 
 BASE_URL = "http://192.168.103.101:51081/v3/api/v3"
 
-async def submit(payload: dict[str, Any]):
-    async with httpx.AsyncClient() as client:
-        res = await client.post(f"{BASE_URL}/brokerSubmission", json=payload)
+def submit(payload: dict[str, Any]) -> Any:
+    with httpx.Client() as client:
+        res = client.post(f"{BASE_URL}/brokerSubmission", json=payload)
         return res.json()
 
 
