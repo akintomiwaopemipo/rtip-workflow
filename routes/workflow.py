@@ -6,7 +6,7 @@ from _dapr.client import schedule_new_workflow
 from workflows.broker_workflow import broker_workflow
 
 
-router = APIRouter()
+router = APIRouter(prefix="/workflow", tags=["Workflow"])
 
 
 @router.post("/start")

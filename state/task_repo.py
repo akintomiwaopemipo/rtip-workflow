@@ -2,6 +2,8 @@ from dapr.clients import DaprClient
 from typing import Optional, List
 import json
 
+from pydantic import ValidationError
+
 from models.task import TaskState
 
 STATE_STORE_NAME = "statestore"
@@ -51,3 +53,24 @@ def get_workflow_tasks(instance_id: str) -> List[TaskState]:
         task_ids: List[str] = json.loads(resp.data) if resp.data else []
 
     return [t for t in (get_task(tid) for tid in task_ids) if t is not None]
+
+
+def get_all_tasks() -> List[TaskState]:
+    with DaprClient() as client:
+        resp = client.query_state(
+            store_name=STATE_STORE_NAME,
+            query=json.dumps({})
+        )
+
+    
+    tasks: list[TaskState] = []
+
+    for item in resp.results:
+        try:
+            print(f"Processing item: {json.loads(item.value.decode('utf-8'))}")
+            task = TaskState.model_validate(item.value)
+            tasks.append(task)
+        except ValidationError:
+            continue
+
+    return tasks

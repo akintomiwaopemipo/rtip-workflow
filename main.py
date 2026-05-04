@@ -7,6 +7,7 @@ from dapr.ext.workflow import WorkflowRuntime
 
 # import routes
 from routes.workflow import router as workflow_router
+from routes.tasks import router as tasks_router
 
 # (optional) shared HTTP client
 import httpx
@@ -43,7 +44,7 @@ app = FastAPI(
 
 
 app.include_router(workflow_router, prefix="/api/v1")
-
+app.include_router(tasks_router, prefix="/api/v1")
 
 @app.get("/health")
 async def health():
