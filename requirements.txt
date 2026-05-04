@@ -1,4 +1,5 @@
 dapr>=1.17.0
 dapr-ext-workflow>=1.17.0
 fastapi
+uvicorn
 httpx

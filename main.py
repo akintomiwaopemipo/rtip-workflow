@@ -5,11 +5,8 @@ from contextlib import asynccontextmanager
 
 from dapr.ext.workflow import WorkflowRuntime
 
-# import your registration function
-from app.dapr.workflow_runtime import register_workflows_and_activities
-
 # import routes
-from app.api.routes.workflow import router as workflow_router
+from routes.workflow import router as workflow_router
 
 # (optional) shared HTTP client
 import httpx
@@ -21,7 +18,6 @@ import httpx
 async def lifespan(app: FastAPI):
     
     workflow_runtime = WorkflowRuntime()
-    register_workflows_and_activities(workflow_runtime)
     workflow_runtime.start()
 
     app.state.http_client = httpx.AsyncClient()
@@ -52,3 +48,8 @@ app.include_router(workflow_router, prefix="/api")
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
