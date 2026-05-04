@@ -8,6 +8,7 @@ from models.tast_status import TaskStatus
 
 class TaskState(BaseModel):
     id: str = Field(..., description="Unique task ID")
+    workflow_instance_id: str = Field(..., description="Associated workflow instance ID")
     case_file_version_id: str = Field(..., description="Associated case file version ID")
     department_name: str
     assigned_to_user: str
