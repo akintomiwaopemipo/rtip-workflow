@@ -42,7 +42,7 @@ app = FastAPI(
 )
 
 
-app.include_router(workflow_router, prefix="/api")
+app.include_router(workflow_router, prefix="/api/v1")
 
 
 @app.get("/health")
