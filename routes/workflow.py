@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/start")
-async def start_workflow(payload: Any):
+async def start_workflow(payload: dict[str, Any]):
     instance_id: str = schedule_new_workflow(
         workflow=broker_workflow,
         input=payload
