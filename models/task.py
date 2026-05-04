@@ -1,15 +1,54 @@
+from enum import Enum
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
 from datetime import date
 
-from models.tast_status import TaskStatus
-from models.test_decision import TaskDecision, TaskDecisionType
+
+
+class TaskType(str, Enum):
+    SUBMISSION_REVIEW = "SubmissionReview"
+    GUIDELINES_VIOLATION_REVIEW = "GuidelinesViolationReview"
+    FINAL_APPROVAL = "FinalApproval"
+
+
+
+class TaskStatus(str, Enum):
+    UNASSIGNED = "Unassigned"
+    IN_PROCESS = "InProcess"
+    COMPLETED = "Completed"
+    PENDING = "Pending"
+    CANCELLED = "Cancelled"
+
+
+class SubmissionDecision(str, Enum):
+    APPROVED = "Approved"
+    DECLINED = "Declined"
+
+
+class ValidationDecision(str, Enum):
+    VALID = "Valid"
+    INVALID = "Invalid"
+
+
+class BooleanDecision(str, Enum):
+    YES = "Yes"
+    NO = "No"
+
+
+TaskDecision = SubmissionDecision | ValidationDecision | BooleanDecision
+class TaskDecisionType(str, Enum):
+    SUBMISSION = "submission"
+    VALIDATION = "validation"
+    BOOLEAN = "boolean"
+
+
 
 
 class TaskState(BaseModel):
     id: str = Field(..., description="Unique task ID")
     workflow_instance_id: str = Field(..., description="Associated workflow instance ID")
     case_file_version_id: str = Field(..., description="Associated case file version ID")
+    type: TaskType
 
     department_name: str
     assigned_to_user: str
