@@ -15,6 +15,7 @@ def save_task(task: TaskState) -> None:
             store_name=STATE_STORE_NAME,
             key=f"task:{task.id}",
             value=task.model_dump_json(),
+            state_metadata={"contentType": "application/json"}
         )
 
 
@@ -59,7 +60,11 @@ def get_all_tasks() -> List[TaskState]:
     with DaprClient() as client:
         resp = client.query_state(
             store_name=STATE_STORE_NAME,
-            query=json.dumps({})
+            query=json.dumps({
+                "filter": {
+                    "EQ": {"id": "wf-2"}
+                }
+            })
         )
 
     
@@ -68,7 +73,7 @@ def get_all_tasks() -> List[TaskState]:
     for item in resp.results:
         try:
             print(f"Processing item: {json.loads(item.value.decode('utf-8'))}")
-            task = TaskState.model_validate(item.value)
+            task = TaskState.model_validate(json.loads(item.value))
             tasks.append(task)
         except ValidationError:
             continue

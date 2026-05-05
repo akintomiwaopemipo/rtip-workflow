@@ -42,7 +42,7 @@ class TaskDecisionType(str, Enum):
     BOOLEAN = "boolean"
 
 
-
+TaskStateMarker = "TaskState"
 
 class TaskState(BaseModel):
     id: str = Field(..., description="Unique task ID")
