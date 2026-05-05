@@ -4,6 +4,7 @@ import json
 
 from pydantic import ValidationError
 
+from models.state import StateType
 from models.task import TaskState
 
 STATE_STORE_NAME = "statestore"
@@ -62,7 +63,7 @@ def get_all_tasks() -> List[TaskState]:
             store_name=STATE_STORE_NAME,
             query=json.dumps({
                 "filter": {
-                    "EQ": {"id": "wf-2"}
+                    "EQ": {"state_type": StateType.TASK}
                 }
             })
         )
@@ -72,7 +73,6 @@ def get_all_tasks() -> List[TaskState]:
 
     for item in resp.results:
         try:
-            print(f"Processing item: {json.loads(item.value.decode('utf-8'))}")
             task = TaskState.model_validate(json.loads(item.value))
             tasks.append(task)
         except ValidationError:

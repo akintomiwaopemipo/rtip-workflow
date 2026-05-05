@@ -3,6 +3,8 @@ from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
 from datetime import date
 
+from models.state import StateType
+
 
 
 class TaskType(str, Enum):
@@ -45,6 +47,7 @@ class TaskDecisionType(str, Enum):
 TaskStateMarker = "TaskState"
 
 class TaskState(BaseModel):
+    state_type: StateType = Field(default=StateType.TASK, description="Marker to identify this as a TaskState")
     id: str = Field(..., description="Unique task ID")
     workflow_instance_id: str = Field(..., description="Associated workflow instance ID")
     case_file_version_id: str = Field(..., description="Associated case file version ID")
