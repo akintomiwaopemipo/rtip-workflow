@@ -24,6 +24,7 @@ async def create_task(
     ctx: WorkflowActivityContext,
     input: dict[str, Any] 
 ):
+    print(f"Creating task for workflow instance {input['workflow_instance_id']} with payload: {input['payload']}")
     task = TaskState(
         id=str(uuid4()),
         workflow_instance_id=input["workflow_instance_id"],
@@ -37,6 +38,7 @@ async def create_task(
     )
 
     save_task(task)
+    
     return task.id
 
 

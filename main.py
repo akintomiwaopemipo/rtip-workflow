@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from dapr.ext.workflow import WorkflowRuntime
+from workflows._wfr import wfr
 
 # import routes
 from routes.workflow import router as workflow_router
@@ -18,8 +18,7 @@ import httpx
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     
-    workflow_runtime = WorkflowRuntime()
-    workflow_runtime.start()
+    wfr.start()
 
     app.state.http_client = httpx.AsyncClient()
 
@@ -29,7 +28,7 @@ async def lifespan(app: FastAPI):
 
 
     await app.state.http_client.aclose()
-    workflow_runtime.shutdown()
+    wfr.shutdown()
 
     print("Shutdown complete")
 

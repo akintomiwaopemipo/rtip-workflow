@@ -1,10 +1,9 @@
-from dapr.ext.workflow import WorkflowRuntime
 from typing import Callable, Generator, TypeVar, Any, cast
+from workflows._wfr import wfr
 
 A = TypeVar("A", bound=Callable[..., Any])
 W = TypeVar("W", bound=Callable[..., Generator[Any, Any, Any]])
 
-wfr = WorkflowRuntime()
 
 def activity(name: str) -> Callable[[A], A]:
     def decorator(fn: A) -> A:

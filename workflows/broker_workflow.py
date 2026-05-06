@@ -8,7 +8,6 @@ from decorators import workflow
 
 
 
-
 @workflow("broker_workflow")
 def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, Any, Any]:
 
