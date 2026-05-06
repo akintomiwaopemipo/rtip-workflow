@@ -20,11 +20,15 @@ def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, An
         }
     )
 
+    print(f"Task created with ID: {task_id}", flush=True)
+
     # Call broker submission
     result = yield ctx.call_activity(
         broker_submission,
         input=payload
     )
+
+    print(f"Broker submission result: {result}", flush=True)
 
     case_file_version_id = result["caseFileVersionId"]
     violations = result.get("guidelinesViolations", [])
@@ -38,6 +42,8 @@ def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, An
             "case_file_version_id": case_file_version_id
         }
     )
+
+    print(f"Task updated with response for task ID: {task_id}", flush=True)
 
     # Decision branch
     if not violations:

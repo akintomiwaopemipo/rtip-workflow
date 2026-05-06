@@ -12,19 +12,18 @@ from state.task_repo import get_task, save_task
 
 
 @activity(name="broker_submission")
-async def broker_submission(
+def broker_submission(
     ctx: WorkflowActivityContext,
     payload: dict[str, Any]
 ) -> dict[str, Any]:
-    return await submit(payload)
+    return submit(payload)
 
 
 @activity("create_task")
-async def create_task(
+def create_task(
     ctx: WorkflowActivityContext,
     input: dict[str, Any] 
 ):
-    print(f"Creating task for workflow instance {input['workflow_instance_id']} with payload: {input['payload']}")
     task = TaskState(
         id=str(uuid4()),
         workflow_instance_id=input["workflow_instance_id"],
@@ -46,7 +45,7 @@ async def create_task(
 
 
 @activity("update_task_after_submission")
-async def update_task_after_submission(
+def update_task_after_submission(
         ctx: WorkflowActivityContext,
         input: dict[str, Any] 
 ):
@@ -67,7 +66,7 @@ async def update_task_after_submission(
 
 
 @activity("complete_task")
-async def complete_task(
+def complete_task(
     ctx: WorkflowActivityContext,
     input: dict[str, Any] 
 ):

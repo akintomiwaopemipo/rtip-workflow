@@ -7,8 +7,8 @@ from services.broker import get_submission as get_submission_service
 
 
 @activity("get_submission")
-async def get_submission(
+def get_submission(
     ctx: WorkflowActivityContext,
     payload: dict[str, Any]
 ) -> dict[str, Any]:
-    return await get_submission_service(payload["caseFileVersionId"])
+    return get_submission_service(payload["caseFileVersionId"])
