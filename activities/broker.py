@@ -26,6 +26,7 @@ def create_task(
 ):
     task = TaskState(
         id=str(uuid4()),
+        sequence_no=0,
         workflow_instance_id=input["workflow_instance_id"],
         case_file_version_id="",
         type=TaskType.SUBMISSION_REVIEW,
