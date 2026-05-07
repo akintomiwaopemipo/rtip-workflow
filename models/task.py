@@ -44,11 +44,12 @@ class TaskDecisionType(str, Enum):
     BOOLEAN = "boolean"
 
 
-TaskStateMarker = "TaskState"
 
 class TaskState(BaseModel):
     state_type: StateType = Field(default=StateType.TASK, description="Marker to identify this as a TaskState")
     id: str = Field(..., description="Unique task ID")
+    parent_task_id: Optional[str] = Field(default=None)
+    sequence_no: int = Field(..., description="Order of task within workflow execution")
     workflow_instance_id: str = Field(..., description="Associated workflow instance ID")
     case_file_version_id: str = Field(..., description="Associated case file version ID")
     type: TaskType
