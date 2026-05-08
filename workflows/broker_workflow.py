@@ -11,6 +11,10 @@ from decorators import workflow
 @workflow("broker_workflow")
 def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, Any, Any]:
 
+    workflow_response: dict[str, Any] = {
+        "instance_id": ctx.instance_id
+    }
+
     # Create initial task
     task_id = yield ctx.call_activity(
         create_task,
@@ -20,15 +24,23 @@ def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, An
         }
     )
 
+    workflow_response["task_id"] = task_id
+
+    
     # Call broker submission
     result = yield ctx.call_activity(
         broker_submission,
         input=payload
     )
 
+    workflow_response["submission_response"] = result
+
 
     case_file_version_id = result["caseFileVersionId"]
     violations = result.get("guidelinesViolations", [])
+
+    workflow_response["case_file_version_id"] = case_file_version_id
+    workflow_response["violations"] = violations
 
     # Update task with response
     yield ctx.call_activity(
@@ -43,7 +55,10 @@ def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, An
 
     # Decision branch
     if not violations:
+        
         # APPROVED path
+        workflow_response["decision"] = "Approved"
+        
         yield ctx.call_activity(
             complete_task,
             input={
@@ -53,13 +68,16 @@ def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, An
             }
         )
 
-        return (yield ctx.call_activity(
+        submission = yield ctx.call_activity(
             get_submission,
             input={"caseFileVersionId": case_file_version_id}
-        ))
+        )
+
+        workflow_response["submission_data"] = submission
 
     else:
         # DECLINED path
+        workflow_response["decision"] = "Declined"
         yield ctx.call_activity(
             complete_task,
             input={
@@ -69,7 +87,11 @@ def broker_workflow(ctx: DaprWorkflowContext, payload: Any) -> Generator[Any, An
             }
         )
 
-        return (yield ctx.call_activity(
+        decline_submission_resonse = yield ctx.call_activity(
             decline_submission,
             input={"caseFileVersionId": case_file_version_id}
-        ))
+        )
+
+        workflow_response["decline_submission_response"] = decline_submission_resonse
+
+    return workflow_response

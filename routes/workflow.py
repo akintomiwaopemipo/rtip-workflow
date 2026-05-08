@@ -4,13 +4,14 @@ from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse
 from _dapr.client import schedule_new_workflow
 from dapr.ext.workflow import DaprWorkflowClient
+from utils.workflow import wait_for_workflow_result
 from workflows.broker_workflow import broker_workflow
 
 
 router = APIRouter(prefix="/workflow", tags=["Workflow"])
 
 
-@router.post("/start")
+@router.post("/broker-submission")
 async def start_workflow(payload: dict[str, Any]):
  
     instance_id: str = schedule_new_workflow(
@@ -18,7 +19,7 @@ async def start_workflow(payload: dict[str, Any]):
         input=payload
     )
 
-    return {"instance_id": instance_id}
+    return wait_for_workflow_result(instance_id)
 
 
 @router.post("/failure-details/{instance_id}", response_class=PlainTextResponse)
