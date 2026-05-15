@@ -19,6 +19,7 @@ ExecStart=/usr/local/bin/dapr run \
   --dapr-http-port 3500 \
   --dapr-grpc-port 50001 \
   --resources-path /home/rtip/rtip-workflow/resources \
+  --config /home/rtip/rtip-workflow/resources/config.yaml \
   -- /home/rtip/miniconda3/envs/dapr/bin/python main.py
 
 Restart=always
